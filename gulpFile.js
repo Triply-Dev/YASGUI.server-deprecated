@@ -1,14 +1,15 @@
 var gulp = require('gulp'),
     git = require('gulp-git'),
     bump = require('gulp-bump'),
-    paths = require('./paths.js'),
     filter = require('gulp-filter'),
     tag_version = require('gulp-tag-version'),
-	runSequence = require('run-sequence').use(gulp),
-	manifest = require('gulp-manifest'),
-	spawn = require('child_process').spawn;
+    nodemon = require('gulp-nodemon'),
+  	runSequence = require('run-sequence').use(gulp),
+  	manifest = require('gulp-manifest'),
+  	spawn = require('child_process').spawn;
 
-
+var srcDir = './src';
+var yasguiDir = './node_modules/yasgui';
 var manifestFile = './server.html.manifest';
 
 function inc(importance) {
@@ -30,21 +31,19 @@ gulp.task('push', function (done) {
   });
 });
 
-gulp.task('commitDist', function() {
-	  return gulp.src(['./' + paths.docDir + '/*', './' + paths.bundleDir + '/*', manifestFile])
+gulp.task('commitSrc', function() {
+	  return gulp.src([manifestFile])
 	    .pipe(git.add({args: '-f'}))
-	    .pipe(git.commit("Updated dist/docs"));
+	    .pipe(git.commit("Updated manifest"));
 });
 
 gulp.task('tag', function() {
-	return gulp.src(['./package.json', './bower.json'])
+	return gulp.src(['./package.json'])
     .pipe(git.commit('version bump'))
-    // read only one file to get the version number
-	.pipe(filter('package.json'))
 	.pipe(tag_version());
 });
 gulp.task('buildManifest', function(){
-  gulp.src(['./dist/yasgui.min.css', './dist/yasgui.min.js'], {cwd: './'})
+  gulp.src([yasguiDir + '/dist/yasgui.min.css', yasguiDir + '/dist/yasgui.min.js'], {cwd: './'})
     .pipe(manifest({
       hash: true,
       timestamp: false,
@@ -59,11 +58,21 @@ gulp.task('bumpMinor', function() { return inc('minor'); })
 gulp.task('bumpMajor', function() { return inc('major'); })
 
 gulp.task('patch', function() {
-	runSequence('bumpPatch', 'default', 'buildManifest', 'commitDist', 'tag', 'publish', 'push');
+	runSequence('bumpPatch', 'buildManifest', 'commitSrc', 'tag', 'publish', 'push');
 });
 gulp.task('minor', function() {
-	runSequence('bumpMinor', 'default', 'buildManifest', 'commitDist', 'tag', 'publish', 'push');
+	runSequence('bumpMinor', 'buildManifest', 'commitDist', 'tag', 'publish', 'push');
 });
 gulp.task('major', function() {
-	runSequence('bumpMajor', 'default', 'buildManifest', 'commitDist', 'tag', 'publish', 'push');
+	runSequence('bumpMajor', 'buildManifest', 'commitDist', 'tag', 'publish', 'push');
+});
+
+
+gulp.task('serve', function() {
+	process.env.yasguiDev = 1;
+	nodemon({ script: './src/index.js', watch: './src' })
+});
+
+gulp.task('default', function() {
+  require('./src/index');
 });

@@ -7,7 +7,7 @@ var express = require('express'),
 	config = require('./config.js');
 
 var dev = !!process.env.yasguiDev;
-
+var yasguiDir = __dirname + '/../node_modules/yasgui';
 var app = express();
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
@@ -21,32 +21,32 @@ if (argv.config) {
 /**
  * update server.html with current config
  */
-var htmlFile = __dirname + '/../server.html';
+var htmlFile = __dirname + '/../index.html';
 var html = fs.readFileSync(htmlFile).toString();
 html = html.replace(/(var config = )\{.*\};/, '$1' + JSON.stringify(config.client) + ';');
 
 if (!dev) {
-	html = html.replace('manifest=""', 'manifest="server.html.manifest"');
+	html = html.replace('manifest=""', 'manifest="index.html.manifest"');
 }
 fs.writeFileSync(htmlFile, html);
 
 
 
 //js and css dependencies
-app.use('/dist/', serveStatic(__dirname + '/../dist/', {index:false}));
+app.use('/dist/', serveStatic(yasguiDir + '/dist/', {index:false}));
 //not really needed, but nice to have anyway
-app.use('/doc/', serveStatic(__dirname + '/../doc/'))
+app.use('/doc/', serveStatic(yasguiDir + '/doc/'))
 
 //the URLs for the API
 app.use('/proxy/', urlencodedParser, require('./corsProxy.js'));
 
-app.use('/server.html.manifest', function(req,res) {
-	res.sendFile('server.html.manifest', {root: __dirname + '/../'});
+app.use('/index.html.manifest', function(req,res) {
+	res.sendFile('index.html.manifest', {root: __dirname + '/../'});
 });
 
 //Finally, just render yasgui
 app.use(/^\/$/, function(req,res, next) {
-	res.sendFile('server.html', {root: __dirname + '/../'});
+	res.sendFile('index.html', {root: __dirname + '/../'});
 });
 require('./shortenerService.js')(app);
 http.createServer(app).listen(config.server.port)
