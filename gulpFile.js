@@ -1,7 +1,6 @@
 var gulp = require('gulp'),
     git = require('gulp-git'),
     bump = require('gulp-bump'),
-    filter = require('gulp-filter'),
     tag_version = require('gulp-tag-version'),
     nodemon = require('gulp-nodemon'),
   	runSequence = require('run-sequence').use(gulp),
