@@ -4,7 +4,8 @@ var express = require('express'),
 	bodyParser = require('body-parser'),
 	extend = require('deep-extend'),
 	fs = require('fs'),
-	config = require('./config.js');
+	config = require('./config.js'),
+	manifest = require('./manifest');
 
 var dev = !!process.env.yasguiDev;
 var yasguiDir = __dirname + '/../node_modules/yasgui';
@@ -18,19 +19,6 @@ if (argv.config) {
 	extend(config, require(argv.config));
 }
 
-/**
- * update server.html with current config
- */
-var htmlFile = __dirname + '/../index.html';
-var html = fs.readFileSync(htmlFile).toString();
-html = html.replace(/(var config = )\{.*\};/, '$1' + JSON.stringify(config.client) + ';');
-
-if (!dev) {
-	html = html.replace('manifest=""', 'manifest="index.html.manifest"');
-}
-fs.writeFileSync(htmlFile, html);
-
-
 
 //js and css dependencies
 app.use('/dist/', serveStatic(yasguiDir + '/dist/', {index:false}));
@@ -41,7 +29,8 @@ app.use('/doc/', serveStatic(yasguiDir + '/doc/'))
 app.use('/proxy/', urlencodedParser, require('./corsProxy.js'));
 
 app.use('/index.html.manifest', function(req,res) {
-	res.sendFile('index.html.manifest', {root: __dirname + '/../'});
+	res.type('text/plain');
+	res.send(manifest.get(dev));
 });
 
 //Finally, just render yasgui

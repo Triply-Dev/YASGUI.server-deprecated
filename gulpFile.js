@@ -4,12 +4,10 @@ var gulp = require('gulp'),
     tag_version = require('gulp-tag-version'),
     nodemon = require('gulp-nodemon'),
   	runSequence = require('run-sequence').use(gulp),
-  	manifest = require('gulp-manifest'),
   	spawn = require('child_process').spawn;
 
 var srcDir = './src';
 var yasguiDir = './node_modules/yasgui';
-var manifestFile = './index.html.manifest';
 
 function inc(importance) {
     // get all the files to bump version in
@@ -30,40 +28,26 @@ gulp.task('push', function (done) {
   });
 });
 
-gulp.task('commitSrc', function() {
-	  return gulp.src([manifestFile])
-	    .pipe(git.add({args: '-f'}))
-	    .pipe(git.commit("Updated manifest"));
-});
 
 gulp.task('tag', function() {
 	return gulp.src(['./package.json'])
     .pipe(git.commit('version bump'))
 	.pipe(tag_version());
 });
-gulp.task('buildManifest', function(){
-  gulp.src([yasguiDir + '/dist/yasgui.min.css', yasguiDir + '/dist/yasgui.min.js'], {cwd: './'})
-    .pipe(manifest({
-      hash: true,
-      timestamp: false,
-      filename: manifestFile,
-      basePath: './dist'
-     }))
-    .pipe(gulp.dest('./'));
-});
+
 
 gulp.task('bumpPatch', function() { return inc('patch'); })
 gulp.task('bumpMinor', function() { return inc('minor'); })
 gulp.task('bumpMajor', function() { return inc('major'); })
 
 gulp.task('patch', function() {
-	runSequence('bumpPatch', 'buildManifest', 'commitSrc', 'tag', 'publish', 'push');
+	runSequence('bumpPatch', 'tag', 'publish', 'push');
 });
 gulp.task('minor', function() {
-	runSequence('bumpMinor', 'buildManifest', 'commitSrc', 'tag', 'publish', 'push');
+	runSequence('bumpMinor', 'tag', 'publish', 'push');
 });
 gulp.task('major', function() {
-	runSequence('bumpMajor', 'buildManifest', 'commitSrc', 'tag', 'publish', 'push');
+	runSequence('bumpMajor', 'tag', 'publish', 'push');
 });
 
 
