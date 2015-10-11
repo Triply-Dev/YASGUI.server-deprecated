@@ -9,7 +9,7 @@ var gulp = require('gulp'),
 
 var srcDir = './src';
 var yasguiDir = './node_modules/yasgui';
-var manifestFile = './server.html.manifest';
+var manifestFile = './index.html.manifest';
 
 function inc(importance) {
     // get all the files to bump version in
@@ -25,7 +25,7 @@ gulp.task('publish', function (done) {
 });
 
 gulp.task('push', function (done) {
-  git.push('origin', 'gh-pages', {args: " --tags"}, function (err) {
+  git.push('origin', 'master', {args: " --tags"}, function (err) {
     if (err) throw err;
   });
 });
@@ -60,10 +60,10 @@ gulp.task('patch', function() {
 	runSequence('bumpPatch', 'buildManifest', 'commitSrc', 'tag', 'publish', 'push');
 });
 gulp.task('minor', function() {
-	runSequence('bumpMinor', 'buildManifest', 'commitDist', 'tag', 'publish', 'push');
+	runSequence('bumpMinor', 'buildManifest', 'commitSrc', 'tag', 'publish', 'push');
 });
 gulp.task('major', function() {
-	runSequence('bumpMajor', 'buildManifest', 'commitDist', 'tag', 'publish', 'push');
+	runSequence('bumpMajor', 'buildManifest', 'commitSrc', 'tag', 'publish', 'push');
 });
 
 
