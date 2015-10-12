@@ -3,7 +3,14 @@ var http = require('follow-redirects').http,
 	querystring = require('querystring'),
 	url = require('url');
 
-
+var proxyHeaders = [
+	'content-type',
+	'content-disposition',
+	'content-encoding',
+	'content-language',
+	'content-length',
+	'date'
+];
 module.exports = function(req, res) {
 	if (req.method == 'GET') {
 		res.statusCode = 405;
@@ -57,8 +64,11 @@ module.exports = function(req, res) {
 	if (parsedEndpoint.protocol == "https:") {
 		protocolReq = https;
 	}
+
 	var proxyReq = protocolReq.request(endpointReqOptions, function(proxyRes) {
-		res.setHeader('content-type', proxyRes.headers['content-type']);
+		proxyHeaders.forEach(function(header){
+			if (header in proxyRes.headers) res.setHeader(header, proxyRes.headers[header]);
+		});
 		res.statusCode = proxyRes.statusCode;
 		proxyRes.on('data', function(chunk) {
 			res.write(chunk);
@@ -75,8 +85,8 @@ module.exports = function(req, res) {
 		res.end();
 	});
 	proxyReq.end();
-	
-	
-	
-	
+
+
+
+
 };
