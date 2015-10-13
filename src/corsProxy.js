@@ -44,7 +44,9 @@ module.exports = function(req, res) {
 		headers:  req.headers,
 		method: requestMethod,
 	}
-	endpointReqOptions.headers['Accept'] = acceptHeader;
+
+	endpointReqOptions.headers.host = endpointReqOptions.host;
+	endpointReqOptions.headers['accept'] = acceptHeader;
 	var postData = null;
 	if (requestMethod == "GET") {
 		var appendedQuery = "";
@@ -57,8 +59,8 @@ module.exports = function(req, res) {
 		endpointReqOptions.path += appendedQuery;
 	} else {
 		postData = querystring.stringify(arguments);
-		endpointReqOptions.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-		endpointReqOptions.headers['Content-Length'] = postData.length;
+		endpointReqOptions.headers['content-type'] = 'application/x-www-form-urlencoded';
+		endpointReqOptions.headers['content-length'] = postData.length;
 	}
 	var protocolReq = http;
 	if (parsedEndpoint.protocol == "https:") {
