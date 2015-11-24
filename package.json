@@ -1,7 +1,7 @@
 {
   "name": "yasgui-server",
   "description": "Yet Another SPARQL GUI - Server",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "src/index.js",
   "license": "MIT",
   "author": "Laurens Rietveld",
@@ -67,6 +67,6 @@
     "tingodb": "^0.3.4",
     "underscore": "^1.7.0",
     "valid-url": "^1.0.9",
-    "yasgui": "^2.0.0"
+    "yasgui": "^2.1.2"
   }
 }
