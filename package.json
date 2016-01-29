@@ -67,6 +67,6 @@
     "tingodb": "^0.3.4",
     "underscore": "^1.7.0",
     "valid-url": "^1.0.9",
-    "yasgui": "^2.1.2"
+    "yasgui": "^2.1.4"
   }
 }
