@@ -1,7 +1,7 @@
 {
   "name": "yasgui-server",
   "description": "Yet Another SPARQL GUI - Server",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "src/index.js",
   "license": "MIT",
   "author": "Laurens Rietveld",
