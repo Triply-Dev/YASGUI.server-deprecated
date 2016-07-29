@@ -21,7 +21,7 @@ if (argv.config) {
 
 
 //js and css dependencies
-app.use('/dist/', serveStatic(yasguiDir + '/dist/', {index:false}));
+app.use('/dist/', serveStatic(config.server.yasguiAssets, {index:false}));
 //not really needed, but nice to have anyway
 app.use('/doc/', serveStatic(yasguiDir + '/doc/'))
 

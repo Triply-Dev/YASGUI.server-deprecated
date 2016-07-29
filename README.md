@@ -13,16 +13,14 @@ This repository provides a YASGUI backend, and provides the following extra func
 
 # Running the YASGUI server
 
-* Make sure npm and gulp are installed
-* Run `npm install` from the gulp dir
-* Change `src/config.js` if you need to
-* Run `gulp`
+* `npm install`
+* `npm run start`
 
 ## Developing YASGUI
 
 
 Feel free to fork and develop this tool. If you have anything to contribute, submit a pull request.
-To develop this tool locally, I'd advice to run YASGUI via `gulp serve` instead of `gulp`, as it disables some HTML5 appcache manifest caching, and automatically restarts the server on code changes.
+To develop this tool locally, I'd advice to run YASGUI via `npm run dev`, as it disables some HTML5 appcache manifest caching, and automatically restarts the server on code changes.
 
 
   [1]: http://doc.yasgui.org
