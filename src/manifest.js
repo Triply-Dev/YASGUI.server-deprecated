@@ -1,4 +1,5 @@
 var fs = require('fs');
+config = require('./config.js');
 /**
 Every fs call we make here is synchronous for simplicity.
 Performance-wise this doesnt matter much, as we cache the string
@@ -33,8 +34,8 @@ var getString = function(dev, cachedFiles) {
 module.exports = {
   get: function(dev) {
     return getString(dev, {
-      'dist/yasgui.min.css': __dirname + '/../node_modules/yasgui/dist/yasgui.min.css',
-      'dist/yasgui.min.js': __dirname + '/../node_modules/yasgui/dist/yasgui.min.js',
+      'dist/yasgui.min.css': config.server.yasguiAssets + '/yasgui.min.css',
+      'dist/yasgui.min.js': config.server.yasguiAssets + '/yasgui.min.js',
     });
   }
 };
