@@ -5,7 +5,7 @@ Performance-wise this doesnt matter much, as we cache the string
 **/
 var manifestString = null;
 var getString = function(dev, cachedFiles) {
-  if (manifestString) return manifestString;//don't cache manifest string, otherwise cache wont be refreshed for new versions
+  //if (manifestString) return manifestString;//don't cache manifest string, otherwise cache wont be refreshed for new versions
   manifestString = "CACHE MANIFEST\n\n";
   manifestString += "CACHE:\n";
   var lastModified = '#';
