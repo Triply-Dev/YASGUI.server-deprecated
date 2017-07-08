@@ -83,7 +83,9 @@ module.exports = function(req, res) {
 	proxyReq.on('error', function (err) {
 		//If any error is encountered during the request (be that with DNS resolution, TCP level errors,
 		//or actual HTTP parse errors) an 'error' event is emitted on the returned request object.
-		res.statusCode = 0;
+		//We used to send code 0 here, but that's not allowed anymore by express... It needs to be a valid status code
+		//i.e. >=1xx and <= 5xx
+		res.statusCode = 502;//bad gateway
 		res.end();
 	});
 	proxyReq.end();
