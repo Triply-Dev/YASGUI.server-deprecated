@@ -11,7 +11,7 @@ module.exports = function(app) {
 		app.use('/shorten', function(req, res) {
 			res.setHeader('Access-Control-Allow-Headers', 'accept, authorization, content-type, x-requested-with');
 			res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-			res.setHeader('Access-Control-Allow-Origin', req.header('origin') || '*'
+			res.setHeader('Access-Control-Allow-Origin', req.header('origin') || '*');
 			if (!req.query.url) {
 				return res.status(400).send('Add ?url as URL argument');
 			}
