@@ -39,7 +39,8 @@ module.exports = function(req, res) {
 	delete req.headers['content-length'];
 
 	var endpointReqOptions = {
-		host: parsedEndpoint.host,
+		host: parsedEndpoint.hostname,
+		port: parsedEndpoint.port,
 		path: parsedEndpoint.path,
 		headers:  req.headers,
 		method: requestMethod,
@@ -85,6 +86,7 @@ module.exports = function(req, res) {
 		//or actual HTTP parse errors) an 'error' event is emitted on the returned request object.
 		//We used to send code 0 here, but that's not allowed anymore by express... It needs to be a valid status code
 		//i.e. >=1xx and <= 5xx
+		console.error('Proxy error', err)
 		res.statusCode = 502;//bad gateway
 		res.end();
 	});
